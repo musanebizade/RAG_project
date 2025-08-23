@@ -155,7 +155,7 @@ def rag_query_endpoint(request: ChatRequest):
 
 @app.post("/rag/stream")
 async def rag_stream_endpoint(request: ChatRequest):
-    # Extract conversation history from messages (excluding the last user message)
+    # Extract conversation history from messages (excluding the last user message.)
     conversation_history = [{"role": msg.role, "content": msg.content} for msg in request.messages[:-1]]
     
     user_message = request.messages[-1].content
