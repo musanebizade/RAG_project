@@ -7,7 +7,7 @@
 
 ---
 
-### IP for testing: 
+### IP for testing: http://54.208.217.12:8501/
 
 ## Architecture
 
