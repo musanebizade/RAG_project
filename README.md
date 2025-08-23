@@ -1,4 +1,4 @@
-# RAGchatbot
+# RAG_project
 
 ![Build Status](https://github.com/musanebizade/Chatbot/actions/workflows/ci-build.yaml/badge.svg)
 
