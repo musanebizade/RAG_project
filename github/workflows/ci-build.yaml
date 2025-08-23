@@ -1,4 +1,5 @@
 name: CI/CD
+
 on:
   push:
     branches:
@@ -18,19 +19,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Install uv and Python 3.13
+      # Setup Python and Docker
       - name: Setup uv (+ Python 3.13)
         uses: astral-sh/setup-uv@v6
         with:
           python-version: "3.13"
           enable-cache: true
 
-      - name: Ruff check
-        run: uvx ruff check --output-format=github .
+      - name: Install dependencies and run Ruff
+        run: |
+          pip install -r requirements.txt
+          uvx ruff check --output-format=github .
 
   deploy:
     name: Deploy (Docker Compose on self-hosted)
-    # Deploy only on pushes to main, never on PRs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [ci]
     runs-on: self-hosted
@@ -44,9 +46,8 @@ jobs:
         run: |
           uname -a || true
           docker --version || true
-          (docker compose version || docker-compose --version) || true
+          docker-compose --version || docker-compose --version || true
 
-      # ← Correctly place .env creation inside steps
       - name: Create .env file from GitHub secrets
         run: |
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
