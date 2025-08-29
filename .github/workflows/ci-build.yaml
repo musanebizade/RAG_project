@@ -63,6 +63,18 @@ jobs:
           docker-compose -f docker-compose.yml up -d --build
           docker-compose -f docker-compose.yml ps
 
+      # Add the health check for frontend after starting the services
+      - name: Wait for frontend to be healthy
+        run: |
+          for i in {1..20}; do
+            if curl -f http://localhost:8501/_stcore/health; then
+              echo "Frontend is ready!"
+              break
+            fi
+            echo "Waiting for frontend..."
+            sleep 5
+          done
+
       # Optional: clean up dangling images
       - name: Prune dangling images
         run: docker image prune -f || true
